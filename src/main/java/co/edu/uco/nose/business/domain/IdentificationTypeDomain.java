@@ -5,35 +5,35 @@ import java.util.UUID;
 import co.edu.uco.nose.crosscuting.helpers.TextHelper;
 import co.edu.uco.nose.crosscuting.helpers.UUIDHelper;
 
-public final class CountryDomain extends Domain
+public final class IdentificationTypeDomain extends Domain
 {
 	private String name;
 	
-	public static final CountryDomain DEFAULT = new CountryDomain();
-
-	public static CountryDomain getDefaultObject()
+	public static final IdentificationTypeDomain DEFAULT = new IdentificationTypeDomain();
+	
+	public static IdentificationTypeDomain getDefaultObject()
 	{
 		return DEFAULT;
 	}
 	
-	public CountryDomain()
+	public IdentificationTypeDomain()
 	{
 		super(UUIDHelper.getUUIDHelper().getDefault());
 		setName(TextHelper.getDefault());
 	}
 	
-	public CountryDomain(final UUID id) 
+	public IdentificationTypeDomain(final UUID id) 
 	{
 		super(id);
 		setName(TextHelper.getDefault());
 	}
 	
-	public CountryDomain(final UUID id, final String name) 
+	public IdentificationTypeDomain(final String name, final UUID id) 
 	{
 		super(id);
 		setName(name);
 	}
-	
+
 	public String getName() 
 	{
 		return name;
@@ -45,5 +45,5 @@ public final class CountryDomain extends Domain
 	}
 	
 	
-	
+
 }
