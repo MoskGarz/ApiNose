@@ -6,7 +6,7 @@ import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helpers.TextHelper;
 import co.edu.uco.nose.crosscuting.helpers.UUIDHelper;
 
-public class StateDomain extends Domain
+public final class StateDomain extends Domain
 {
 	private String name;
 	private CountryDomain country;

@@ -2,6 +2,7 @@ package co.edu.uco.nose.business.domain;
 
 import java.util.UUID;
 
+import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helpers.TextHelper;
 import co.edu.uco.nose.crosscuting.helpers.UUIDHelper;
 
@@ -18,7 +19,6 @@ public final class UserDomain extends Domain
 	private String phoneNumber;
 	private Boolean emailVerified;
 	private Boolean phoneNumberVerified;
-	
 	public static final UserDomain DEFAULT = new UserDomain();
 	public static UserDomain getDefaultObject()
 	{
@@ -80,7 +80,7 @@ public final class UserDomain extends Domain
 		return identificationType;
 	}
 	public void setIdentificationType(IdentificationTypeDomain identificationType) {
-		this.identificationType = identificationType;
+		this.identificationType = ObjectHelper.getDefault(identificationType, new IdentificationTypeDomain());
 	}
 	public String getIdentificationNumber() {
 		return identificationNumber;
@@ -116,7 +116,7 @@ public final class UserDomain extends Domain
 		return city;
 	}
 	public void setCity(CityDomain city) {
-		this.city = city;
+		this.city = ObjectHelper.getDefault(city, CityDomain.getDefaultObject());
 	}
 	public String getEmail() {
 		return email;

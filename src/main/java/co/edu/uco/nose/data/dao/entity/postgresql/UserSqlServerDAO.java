@@ -37,13 +37,13 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
             preparedStatement.setString(3, entity.getIdentificationNumber());
             preparedStatement.setString(4, entity.getFirstName());
             preparedStatement.setString(5, entity.getSecondName());
-            preparedStatement.setString(6, entity.getFirstSurname());
-            preparedStatement.setString(7, entity.getSecondSurname());
+            preparedStatement.setString(6, entity.getFirstLastname());
+            preparedStatement.setString(7, entity.getSecondLastname());
             preparedStatement.setObject(8, entity.getCity().getId());
             preparedStatement.setString(9, entity.getEmail());
-            preparedStatement.setString(10, entity.getMobilePhoneNumber());
-            preparedStatement.setBoolean(11, entity.isEmailConfirmed());
-            preparedStatement.setBoolean(12, entity.isMobilePhoneNumberConfirmed());
+            preparedStatement.setString(10, entity.getPhoneNumber());
+            preparedStatement.setBoolean(11, entity.getEmailVerified());
+            preparedStatement.setBoolean(12, entity.getPhoneNumberVerified());
 
             preparedStatement.executeUpdate();
 
@@ -153,13 +153,13 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
                     user.setIdentificationNumber(resultSet.getString("numeroIdentificacion"));
                     user.setFirstName(resultSet.getString("primerNombre"));
                     user.setSecondName(resultSet.getString("segundoNombre"));
-                    user.setFirstSurname(resultSet.getString("primerApellido"));
-                    user.setSecondSurname(resultSet.getString("segundoApellido"));
+                    user.setFirstLastname(resultSet.getString("primerApellido"));
+                    user.setSecondLastname(resultSet.getString("segundoApellido"));
                     user.setCity(city);
                     user.setEmail(resultSet.getString("correoElectronico"));
-                    user.setMobilePhoneNumber(resultSet.getString("numeroTelefonoMovil"));
-                    user.setEmailConfirmed(resultSet.getBoolean("correoElectronicoConfirmado"));
-                    user.setMobilePhoneNumberConfirmed(resultSet.getBoolean("numeroTelefonoMovilConfirmado"));
+                    user.setPhoneNumber(resultSet.getString("numeroTelefonoMovil"));
+                    user.setEmailVerified(resultSet.getBoolean("correoElectronicoConfirmado"));
+                    user.setPhoneNumberVerified(resultSet.getBoolean("numeroTelefonoMovilConfirmado"));
 
                 }
             }
@@ -191,13 +191,13 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
             preparedStatement.setString(2, entity.getIdentificationNumber());
             preparedStatement.setString(3, entity.getFirstName());
             preparedStatement.setString(4, entity.getSecondName());
-            preparedStatement.setString(5, entity.getFirstSurname());
-            preparedStatement.setString(6, entity.getSecondSurname());
+            preparedStatement.setString(5, entity.getFirstLastname());
+            preparedStatement.setString(6, entity.getSecondLastname());
             preparedStatement.setObject(7, entity.getCity().getId());
             preparedStatement.setString(8, entity.getEmail());
-            preparedStatement.setString(9, entity.getMobilePhoneNumber());
-            preparedStatement.setBoolean(10, entity.isEmailConfirmed());
-            preparedStatement.setBoolean(11, entity.isMobilePhoneNumberConfirmed());
+            preparedStatement.setString(9, entity.getPhoneNumber());
+            preparedStatement.setBoolean(10, entity.getEmailVerified());
+            preparedStatement.setBoolean(11, entity.getPhoneNumberVerified());
             preparedStatement.setObject(12, entity.getId());
 
             preparedStatement.executeUpdate();
