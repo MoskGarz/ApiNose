@@ -21,6 +21,7 @@ public final class UserEntity {
     private Boolean phoneNumberVerified;
     private Boolean isEmailVerifiedDefaultValue;
     private Boolean isPhoneNumberVerifiedDefaultValue;
+    private static final UserEntity DEFAULT_OBJECT = new UserEntity();
 
     public UserEntity() {
         setId(UUIDHelper.getUUIDHelper().getDefault());
@@ -71,6 +72,10 @@ public final class UserEntity {
         setPhoneNumber(phoneNumber);
         setEmailVerified(emailVerified);
         setPhoneNumberVerified(phoneNumberVerified);
+    }
+
+    public static UserEntity getDefaultObject() {
+        return DEFAULT_OBJECT;
     }
 
     public UUID getId() {

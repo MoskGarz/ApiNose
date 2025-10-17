@@ -29,8 +29,8 @@ public class SQLConnectionHelper {
                 throw NoseException.create(userMessage, technicalMessage);
             }
         } catch (final SQLException exception) {
-            var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_EXCEPTION_VALIDATING_CONNECTION_STATUS.getContent();
+            var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();
             throw NoseException.create(exception, userMessage, technicalMessage);
         } catch (final Exception exception) {
             var userMessage = MessagesEnum.USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_CONNECTION_STATUS.getContent();

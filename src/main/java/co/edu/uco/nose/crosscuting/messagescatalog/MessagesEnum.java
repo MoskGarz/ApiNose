@@ -13,8 +13,11 @@ public enum MessagesEnum {
     TECHNICAL_ERROR_TRANSACTION_IS_NOT_STARTED("Transacción no iniciada en la base de datos","La operación no puede completarse porque la transacción requerida no fue iniciada correctamente en la base de datos. Por favor revise la lógica de inicio de transacciones y si el problema persiste, contacte al administrador de la aplicación."),
     USER_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_STARTED("Error inesperado al validar el inicio de la transacción","Se presentó un problema inesperado al validar el estado de la transacción. Por favor intente nuevamente y si el problema persiste, contacte al administrador de la aplicación."),
     TECHNICAL_ERROR_SQL_CONNECTION_SQL_EXCEPTION_VALIDATING_TRANSACTION_IS_STARTED("Error SQL al validar el inicio de la transacción","Se produjo una excepción SQL al intentar validar el estado de la transacción. Por favor revise la conexión con la base de datos y si el problema persiste, contacte al administrador de la aplicación."),
-    TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_STARTED("Error técnico inesperado al validar el inicio de la transacción","Se presentó un error técnico inesperado al intentar validar el estado de la transacción. Por favor revise los registros del sistema y si el problema persiste, contacte al administrador de la aplicación.");
-
+    TECHNICAL_ERROR_SQL_CONNECTION_UNEXPECTED_ERROR_VALIDATING_TRANSACTION_IS_STARTED("Error técnico inesperado al validar el inicio de la transacción","Se presentó un error técnico inesperado al intentar validar el estado de la transacción. Por favor revise los registros del sistema y si el problema persiste, contacte al administrador de la aplicación."),
+    USER_ERROR_PERSISTENCE_SQL("Problema con la base de datos", "Se ha presentado un problema al interactuar con la fuente de información. Por favor, intente de nuevo y si el problema persiste contacte al administrador."),
+    TECHNICAL_ERROR_PERSISTENCE_SQL("Excepción SQL inesperada en el DAO", "Se produjo un error de tipo SQLException en la capa DAO al ejecutar la operación."),
+    USER_ERROR_PERSISTENCE_UNEXPECTED("Problema inesperado de la aplicación", "Se ha presentado un problema inesperado al interactuar con la fuente de información. Por favor, intente de nuevo y si el problema persiste contacte al administrador."),
+    TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED("Excepción de lógica no SQL en la capa DAO", "Se produjo una excepción de lógica o inesperada (NullPointer, etc.) en la capa DAO al tratar de ejecutar la operación.");
 
     private String title;
     private String content;
