@@ -8,6 +8,10 @@ import java.util.UUID;
 public final class CountryEntity {
     private UUID id;
     private String name;
+    public static final CountryEntity DEFAULT = new CountryEntity();
+    public static CountryEntity getDefaultObject() {
+        return DEFAULT;
+    }
 
     public CountryEntity() {
         setId(UUIDHelper.getUUIDHelper().getDefault());

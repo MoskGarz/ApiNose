@@ -16,7 +16,7 @@ public final class CountryDomain extends Domain
 		return DEFAULT;
 	}
 	
-	public CountryDomain()
+	CountryDomain()
 	{
 		super(UUIDHelper.getUUIDHelper().getDefault());
 		setName(TextHelper.getDefault());

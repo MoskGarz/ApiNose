@@ -38,7 +38,7 @@ public abstract class DAOFactory {
 
     protected abstract void openConnection();
 
-    protected final void innitTransaction() {
+    public final void innitTransaction() {
         SQLConnectionHelper.ensureTransactionIsNotStarted(connection);
 
         try {
@@ -54,7 +54,7 @@ public abstract class DAOFactory {
         }
     }
 
-    protected final void commitTransaction() {
+    public final void commitTransaction() {
         SQLConnectionHelper.ensureTransactionIsStarted(connection);
 
         try {
@@ -70,7 +70,7 @@ public abstract class DAOFactory {
         }
     }
 
-    protected final void rollbackTransaction() {
+    public final void rollbackTransaction() {
         SQLConnectionHelper.ensureTransactionIsStarted(connection);
 
         try {
@@ -85,7 +85,7 @@ public abstract class DAOFactory {
             throw NoseException.create(exception, userMessage, technicalMessage);
         }
     }
-    protected final void closeConnection() {
+    public final void closeConnection() {
         SQLConnectionHelper.ensureConnectionIsOpen(connection);
 
         try {

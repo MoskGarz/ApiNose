@@ -40,4 +40,8 @@ public final class UUIDHelper
 		}
 	}
 
+	public UUID generateNewUUID()
+	{
+		return UUID.randomUUID();
+	}
 }
