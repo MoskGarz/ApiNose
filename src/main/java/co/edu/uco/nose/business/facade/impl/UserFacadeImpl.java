@@ -5,6 +5,7 @@ import co.edu.uco.nose.business.business.impl.UserBusinessImpl;
 import co.edu.uco.nose.business.facade.UserFacade;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.data.dao.factory.DAOFactory;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.dto.UserDTO;
 
 import java.util.List;
@@ -33,8 +34,8 @@ public final class UserFacadeImpl implements UserFacade {
         } catch (final Exception exception){
             daoFactory.rollbackTransaction();
 
-            var userMessage = "";
-            var technicalMessage = "";
+            var userMessage = MessagesEnum.USER_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED.getContent();
 
             throw NoseException.create(exception, userMessage, technicalMessage);
 

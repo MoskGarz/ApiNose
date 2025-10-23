@@ -1,6 +1,5 @@
 package co.edu.uco.nose.business.facade;
 
-import co.edu.uco.nose.business.domain.UserDomain;
 import co.edu.uco.nose.dto.UserDTO;
 
 import java.util.List;

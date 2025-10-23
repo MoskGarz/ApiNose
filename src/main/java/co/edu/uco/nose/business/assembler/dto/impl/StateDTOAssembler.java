@@ -7,6 +7,7 @@ import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.dto.StateDTO;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public final class StateDTOAssembler implements DTOAssembler<StateDTO, StateDomain> {
 
@@ -31,11 +32,19 @@ public final class StateDTOAssembler implements DTOAssembler<StateDTO, StateDoma
 
     @Override
     public List<StateDTO> toDTOList(List<StateDomain> domainList) {
-        return null;
+        var dtoList = new ArrayList<StateDTO>();
+        for (var domain : domainList) {
+            dtoList.add(toDTO(domain));
+        }
+        return dtoList;
     }
 
     @Override
     public List<StateDomain> toDomainList(List<StateDTO> dtoList) {
-        return null;
+        var domainList = new ArrayList<StateDomain>();
+        for (var dto : dtoList) {
+            domainList.add(toDomain(dto));
+        }
+        return domainList;
     }
 }

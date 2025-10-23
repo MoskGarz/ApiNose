@@ -20,6 +20,13 @@ public class UserDTO {
     private Boolean emailVerified;
     private Boolean phoneNumberVerified;
 
+    
+    public static final UserDTO DEFAULT = new UserDTO();
+
+    public static UserDTO getDefaultObject() {
+        return DEFAULT;
+    }
+
     public UserDTO() {
         setId(UUIDHelper.getUUIDHelper().getDefault());
         setIdentificationType(IdentificationTypeDTO.getDefaultObject());

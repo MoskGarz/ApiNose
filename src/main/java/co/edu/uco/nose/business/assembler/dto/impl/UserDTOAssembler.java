@@ -8,6 +8,7 @@ import co.edu.uco.nose.dto.UserDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 
 public final class UserDTOAssembler implements DTOAssembler<UserDTO, UserDomain> {
 
@@ -22,14 +23,44 @@ public final class UserDTOAssembler implements DTOAssembler<UserDTO, UserDomain>
 
     @Override
     public UserDTO toDTO(final UserDomain domain) {
-        //coco
-        return null;
+        var domainTmp = ObjectHelper.getDefault(domain, UserDomain.getDefaultObject());
+        var identificationTypeDTO = getIdentificationTypeDTOAssembler().toDTO(domainTmp.getIdentificationType());
+        var cityDTO = getCityDTOAssembler().toDTO(domainTmp.getCity());
+        return new UserDTO(
+                domainTmp.getId(),
+                identificationTypeDTO,
+                domainTmp.getIdentificationNumber(),
+                domainTmp.getFirstName(),
+                domainTmp.getSecondName(),
+                domainTmp.getFirstLastName(),
+                domainTmp.getSecondLastName(),
+                cityDTO,
+                domainTmp.getEmail(),
+                domainTmp.getPhoneNumber(),
+                domainTmp.getEmailVerified(),
+                domainTmp.getPhoneNumberVerified()
+        );
     }
 
     @Override
     public UserDomain toDomain(final UserDTO dto) {
-        //coco
-        return null;
+        var dtoTmp = ObjectHelper.getDefault(dto, UserDTO.getDefaultObject());
+        var identificationTypeDomain = getIdentificationTypeDTOAssembler().toDomain(dtoTmp.getIdentificationType());
+        var cityDomain = getCityDTOAssembler().toDomain(dtoTmp.getCity());
+        return new UserDomain(
+                dtoTmp.getId(),
+                identificationTypeDomain,
+                dtoTmp.getIdentificationNumber(),
+                dtoTmp.getFirstName(),
+                dtoTmp.getSecondName(),
+                dtoTmp.getFirstLastname(),
+                dtoTmp.getSecondLastname(),
+                cityDomain,
+                dtoTmp.getEmail(),
+                dtoTmp.getPhoneNumber(),
+                dtoTmp.getEmailVerified(),
+                dtoTmp.getPhoneNumberVerified()
+        );
     }
 
     @Override

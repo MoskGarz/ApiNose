@@ -4,6 +4,9 @@ import static co.edu.uco.nose.business.assembler.entity.impl.CountryEntityAssemb
 import co.edu.uco.nose.business.assembler.entity.EntityAssembler;
 import co.edu.uco.nose.business.domain.StateDomain;
 import co.edu.uco.nose.entity.StateEntity;
+import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class StateEntityAssembler implements EntityAssembler<StateEntity, StateDomain> {
 
@@ -13,13 +16,35 @@ public final class StateEntityAssembler implements EntityAssembler<StateEntity, 
     }
     @Override
     public StateEntity toEntity(final StateDomain domain) {
-        // coco
-        return null;
+        var domainTmp = ObjectHelper.getDefault(domain, StateDomain.getDefaultObject());
+        var countryEntity = getCountryEntityAssembler().toEntity(domainTmp.getCountry());
+        return new StateEntity(domainTmp.getId(), domainTmp.getName(), countryEntity);
     }
 
     @Override
     public StateDomain toDomain(final StateEntity entity) {
-        // coco
-        return null;
+        var entityTmp = ObjectHelper.getDefault(entity, new StateEntity());
+        var countryDomain = getCountryEntityAssembler().toDomain(entityTmp.getCountry());
+        return new StateDomain(entityTmp.getId(), entityTmp.getName(), countryDomain);
+    }
+
+    @Override
+    public List<StateEntity> toEntityList(final List<StateDomain> domainList) {
+        var list = new ArrayList<StateEntity>();
+        if (domainList == null) return list;
+        for (var domain : domainList) {
+            list.add(toEntity(domain));
+        }
+        return list;
+    }
+
+    @Override
+    public List<StateDomain> toDomainList(final List<StateEntity> entityList) {
+        var list = new ArrayList<StateDomain>();
+        if (entityList == null) return list;
+        for (var entity : entityList) {
+            list.add(toDomain(entity));
+        }
+        return list;
     }
 }

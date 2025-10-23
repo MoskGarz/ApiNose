@@ -1,4 +1,4 @@
-package co.edu.uco.nose.data.dao.entity.postgresql;
+package co.edu.uco.nose.data.dao.entity.sqlserver;
 
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helpers.SQLConnectionHelper;
@@ -17,7 +17,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
@@ -32,7 +31,7 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         SQLConnectionHelper.ensureTransactionIsStarted(getConnection());
 
         final var sql = new StringBuilder();
-        sql.append("INSERT INTO User(id, tipoIdentificacion, numeroIdentificacion, primerNombre, segundoNombre, primerApellido, segundoApellido, ciudadResidencia, correoElectronico, numeroTelefonoMovil, correoElectronicoConfirmado, numeroTelefonoMovilConfirmado) ");
+        sql.append("INSERT INTO Usuario(id, tipoIdentificacion, numeroIdentificacion, primerNombre, segundoNombre, primerApellido, segundoApellido, ciudadResidencia, correoElectronico, numeroTelefonoMovil, correoElectronicoConfirmado, numeroTelefonoMovilConfirmado) ");
         sql.append("SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?");
 
         try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())){
@@ -62,7 +61,7 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         SQLConnectionHelper.ensureTransactionIsStarted(getConnection());
 
         final var sql = new StringBuilder();
-        sql.append("DELETE FROM User ");
+        sql.append("DELETE FROM Usuario ");
         sql.append("WHERE id = ?");
 
         try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())){
@@ -98,10 +97,10 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         sql.append("        u.correoElectronicoConfirmado,");
         sql.append("        u.numeroTelefonoMovilConfirmado ");
         sql.append("FROM    Usuario AS u ");
-        sql.append("INNER JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
-        sql.append("INNER JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
-        sql.append("INNER JOIN    Departamento AS d ON d.id = c.departamento ");
-        sql.append("INNER JOIN    Pais AS p ON p.id = d.pais ");
+        sql.append("LEFT JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
+        sql.append("LEFT JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
+        sql.append("LEFT JOIN    Departamento AS d ON d.id = c.departamento ");
+        sql.append("LEFT JOIN    Pais AS p ON p.id = d.pais ");
 
         final List<UserEntity> results = new ArrayList<>();
 
@@ -123,6 +122,7 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
     public List<UserEntity> findByFilter(UserEntity filterEntity) {
 
         final var sql = new StringBuilder();
+        
         sql.append("SELECT  u.id,");
         sql.append("        ti.id AS idTipoIdentificacion,");
         sql.append("        ti.nombre AS nombreTipoIdentificacion,");
@@ -142,20 +142,20 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         sql.append("        u.correoElectronicoConfirmado,");
         sql.append("        u.numeroTelefonoMovilConfirmado ");
         sql.append("FROM    Usuario AS u ");
-        sql.append("INNER JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
-        sql.append("INNER JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
-        sql.append("INNER JOIN    Departamento AS d ON d.id = c.departamento ");
-        sql.append("INNER JOIN    Pais AS p ON p.id = d.pais ");
+        sql.append("LEFT JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
+        sql.append("LEFT JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
+        sql.append("LEFT JOIN    Departamento AS d ON d.id = c.departamento ");
+        sql.append("LEFT JOIN    Pais AS p ON p.id = d.pais ");
 
         final var where = new StringBuilder();
         final List<Object> parameters = new ArrayList<>();
 
-        if(filterEntity.getId() != UUIDHelper.getUUIDHelper().getDefault()){
+        if(!filterEntity.getId().toString().isEmpty() && filterEntity.getId() != UUIDHelper.getUUIDHelper().getDefault()){
             where.append("u.id = ? ");
             parameters.add(filterEntity.getId());
         }
 
-        if(!Objects.equals(filterEntity.getFirstName(), TextHelper.getDefault())){
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getFirstName()).isEmpty()){
             if(where.length() > 0){
                 where.append("AND ");
             }
@@ -163,10 +163,97 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
             parameters.add(filterEntity.getFirstName());
         }
 
-        //se agregan los filtros que quieran
+        // Tipo de identificación (id)
+        if(filterEntity.getIdentificationType() != null &&
+                filterEntity.getIdentificationType().getId() != UUIDHelper.getUUIDHelper().getDefault()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("ti.id = ? ");
+            parameters.add(filterEntity.getIdentificationType().getId());
+        }
 
-        if(!where.isEmpty())
-        {
+        // Número de identificación
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getIdentificationNumber()).isEmpty()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.numeroIdentificacion = ? ");
+            parameters.add(filterEntity.getIdentificationNumber());
+        }
+
+        // Segundo nombre
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getSecondName()).isEmpty()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.segundoNombre = ? ");
+            parameters.add(filterEntity.getSecondName());
+        }
+
+        // Apellidos
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getFirstLastname()).isEmpty()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.primerApellido = ? ");
+            parameters.add(filterEntity.getFirstLastname());
+        }
+
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getSecondLastname()).isEmpty()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.segundoApellido = ? ");
+            parameters.add(filterEntity.getSecondLastname());
+        }
+
+        // Ciudad (id)
+        if(filterEntity.getCity() != null &&
+                filterEntity.getCity().getId() != UUIDHelper.getUUIDHelper().getDefault()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("c.id = ? ");
+            parameters.add(filterEntity.getCity().getId());
+        }
+
+        // Correo electrónico
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getEmail()).isEmpty()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.correoElectronico = ? ");
+            parameters.add(filterEntity.getEmail());
+        }
+
+        // Número de teléfono móvil
+        if(!TextHelper.getDefaultWithTrim(filterEntity.getPhoneNumber()).isEmpty()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.numeroTelefonoMovil = ? ");
+            parameters.add(filterEntity.getPhoneNumber());
+        }
+
+        // Confirmaciones (solo si el valor fue establecido explícitamente)
+        if(filterEntity.getIsEmailVerifiedDefaultValue() != null && !filterEntity.getIsEmailVerifiedDefaultValue()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.correoElectronicoConfirmado = ? ");
+            parameters.add(filterEntity.getEmailVerified());
+        }
+
+        if(filterEntity.getIsPhoneNumberVerifiedDefaultValue() != null && !filterEntity.getIsPhoneNumberVerifiedDefaultValue()){
+            if(where.length() > 0){
+                where.append("AND ");
+            }
+            where.append("u.numeroTelefonoMovilConfirmado = ? ");
+            parameters.add(filterEntity.getPhoneNumberVerified());
+        }
+
+        if (where.length() > 0) {
             sql.append("WHERE ").append(where);
         }
 
@@ -214,20 +301,19 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         sql.append("        u.correoElectronicoConfirmado,");
         sql.append("        u.numeroTelefonoMovilConfirmado ");
         sql.append("FROM    Usuario AS u ");
-        sql.append("INNER JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
-        sql.append("INNER JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
-        sql.append("INNER JOIN    Departamento AS d ON d.id = c.departamento ");
-        sql.append("INNER JOIN    Pais AS p ON p.id = d.pais ");
+        sql.append("LEFT JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
+        sql.append("LEFT JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
+        sql.append("LEFT JOIN    Departamento AS d ON d.id = c.departamento ");
+        sql.append("LEFT JOIN    Pais AS p ON p.id = d.pais ");
         sql.append("WHERE   u.id = ? ");
 
-        try (var preparedStatement = this.getConnection().prepareStatement(sql.toString());
-             var resultSet = preparedStatement.executeQuery()){
-
+        try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())){
             preparedStatement.setObject(1, uuid);
-            if (resultSet.next()){
-                return mapResultSetToUserEntity(resultSet);
+            try (var resultSet = preparedStatement.executeQuery()){
+                if (resultSet.next()){
+                    return mapResultSetToUserEntity(resultSet);
+                }
             }
-
         } catch (final Exception exception){
             handlePersistenceException(exception, "consultar un usuario por su identificador");
         }
@@ -241,7 +327,7 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         SQLConnectionHelper.ensureTransactionIsStarted(getConnection());
 
         final var sql = new StringBuilder();
-        sql.append("UPDATE User SET tipoIdentificacion = ?, numeroIdentificacion = ?, primerNombre = ?, segundoNombre = ?, primerApellido = ?, segundoApellido = ?, ciudadResidencia = ?, correoElectronico = ?, numeroTelefonoMovil = ?, correoElectronicoConfirmado = ?, numeroTelefonoMovilConfirmado = ? ");
+        sql.append("UPDATE Usuario SET tipoIdentificacion = ?, numeroIdentificacion = ?, primerNombre = ?, segundoNombre = ?, primerApellido = ?, segundoApellido = ?, ciudadResidencia = ?, correoElectronico = ?, numeroTelefonoMovil = ?, correoElectronicoConfirmado = ?, numeroTelefonoMovilConfirmado = ? ");
         sql.append("WHERE id = ?");
 
         try (var preparedStatement = this.getConnection().prepareStatement(sql.toString())){
@@ -325,5 +411,6 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         throw NoseException.create(exception, userMessage, technicalMessage);
     }
 }
+
 
 
