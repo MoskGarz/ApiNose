@@ -142,15 +142,15 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         sql.append("        u.correoElectronicoConfirmado,");
         sql.append("        u.numeroTelefonoMovilConfirmado ");
         sql.append("FROM    Usuario AS u ");
-        sql.append("LEFT JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
-        sql.append("LEFT JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
-        sql.append("LEFT JOIN    Departamento AS d ON d.id = c.departamento ");
-        sql.append("LEFT JOIN    Pais AS p ON p.id = d.pais ");
+        sql.append("INNER JOIN    TipoIdentificacion AS ti ON ti.id = u.tipoIdentificacion ");
+        sql.append("INNER JOIN    Ciudad AS c ON c.id = u.ciudadResidencia ");
+        sql.append("INNER JOIN    Departamento AS d ON d.id = c.departamento ");
+        sql.append("INNER JOIN    Pais AS p ON p.id = d.pais ");
 
         final var where = new StringBuilder();
         final List<Object> parameters = new ArrayList<>();
 
-        if(!filterEntity.getId().toString().isEmpty() && filterEntity.getId() != UUIDHelper.getUUIDHelper().getDefault()){
+        if(!filterEntity.getId().equals(UUIDHelper.getUUIDHelper().getDefault())){
             where.append("u.id = ? ");
             parameters.add(filterEntity.getId());
         }
@@ -165,7 +165,7 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
 
         // Tipo de identificación (id)
         if(filterEntity.getIdentificationType() != null &&
-                filterEntity.getIdentificationType().getId() != UUIDHelper.getUUIDHelper().getDefault()){
+                !filterEntity.getIdentificationType().getId().equals(UUIDHelper.getUUIDHelper().getDefault())){
             if(where.length() > 0){
                 where.append("AND ");
             }
@@ -210,7 +210,7 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
 
         // Ciudad (id)
         if(filterEntity.getCity() != null &&
-                filterEntity.getCity().getId() != UUIDHelper.getUUIDHelper().getDefault()){
+                !filterEntity.getCity().getId().equals(UUIDHelper.getUUIDHelper().getDefault())){
             if(where.length() > 0){
                 where.append("AND ");
             }

@@ -2,7 +2,7 @@ package co.edu.uco.nose.crosscuting.helpers;
 
 public final class TextHelper 
 {
-	public static final String EMPTY = " ";
+	public static final String EMPTY = "";
 	
 	private TextHelper()
 	{

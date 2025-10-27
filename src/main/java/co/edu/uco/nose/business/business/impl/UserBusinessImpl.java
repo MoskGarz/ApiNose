@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public final class UserBusinessImpl implements UserBusiness {
 
-    private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
     public UserBusinessImpl(final DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -22,18 +22,15 @@ public final class UserBusinessImpl implements UserBusiness {
 
     @Override
     public void registerNewUser(UserDomain userDomain) {
-        // 0. Validaciones de formato y consistencia
+
         validateDataConsistency(userDomain);
 
-        // 1. Validaciones de unicidad
         ensureIdentificationIsUnique(userDomain);
         ensureEmailIsUnique(userDomain);
         ensurePhoneIsUnique(userDomain);
 
-        // 2. Generar un UUID único
         var userId = generateUniqueUserId();
 
-        // 3. Mapear y registrar
         var userEntity = getUserEntityAssembler().toEntity(userDomain);
         userEntity.setId(userId);
         daoFactory.getUserDAO().create(userEntity);
@@ -92,7 +89,7 @@ public final class UserBusinessImpl implements UserBusiness {
         filter.setIdentificationType(idType);
         filter.setIdentificationNumber(userDomain.getIdentificationNumber());
 
-        var matches = daoFactory.getUserDAO().findByFilter(filter);
+        List<UserEntity> matches = daoFactory.getUserDAO().findByFilter(filter);
         if (!matches.isEmpty()) {
             var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION.getContent();
             var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION.getContent();
@@ -116,7 +113,7 @@ public final class UserBusinessImpl implements UserBusiness {
         var filter = new UserEntity();
         filter.setPhoneNumber(userDomain.getPhoneNumber());
 
-        var matches = daoFactory.getUserDAO().findByFilter(filter);
+        List<UserEntity> matches = daoFactory.getUserDAO().findByFilter(filter);
         if (!matches.isEmpty()) {
             var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_PHONE.getContent();
             var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_PHONE.getContent();
