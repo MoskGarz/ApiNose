@@ -2,6 +2,7 @@ package co.edu.uco.nose.business.facade.impl;
 
 import co.edu.uco.nose.business.assembler.dto.impl.UserDTOAssembler;
 import co.edu.uco.nose.business.business.impl.UserBusinessImpl;
+import co.edu.uco.nose.business.domain.UserDomain;
 import co.edu.uco.nose.business.facade.UserFacade;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.data.dao.factory.DAOFactory;
@@ -47,26 +48,146 @@ public final class UserFacadeImpl implements UserFacade {
     @Override
     public void dropUser(UUID userId) {
 
+         
+        var daoFactory = DAOFactory.getFactory();
+        var business = new UserBusinessImpl(daoFactory);
+
+        try {
+
+            daoFactory.innitTransaction();
+            business.dropUser(userId);
+            daoFactory.commitTransaction();
+
+        } catch (final NoseException exception){
+            daoFactory.rollbackTransaction();
+            throw exception;
+        } catch (final Exception exception){
+            daoFactory.rollbackTransaction();
+
+            var userMessage = MessagesEnum.USER_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+
+            throw NoseException.create(exception, userMessage, technicalMessage);
+
+        } finally {
+            daoFactory.closeConnection();
+        }
     }
 
     @Override
     public void updateUserInformation(UUID userid, UserDTO userDTO) {
+        
+        var daoFactory = DAOFactory.getFactory();
+        var business = new UserBusinessImpl(daoFactory);
+        var userDomain = UserDTOAssembler.getUserDTOAssembler().toDomain(userDTO);
 
+        try {
+
+            daoFactory.innitTransaction();
+            business.updateUserInformation(userid, userDomain);
+            daoFactory.commitTransaction();
+
+        } catch (final NoseException exception){
+            daoFactory.rollbackTransaction();
+            throw exception;
+        } catch (final Exception exception){
+            daoFactory.rollbackTransaction();
+
+            var userMessage = MessagesEnum.USER_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+
+            throw NoseException.create(exception, userMessage, technicalMessage);
+
+        } finally {
+            daoFactory.closeConnection();
+        }
     }
 
     @Override
     public List<UserDTO> findAllUsers() {
-        return null;
+
+        var daoFactory = DAOFactory.getFactory();
+        var business = new UserBusinessImpl(daoFactory);
+        
+
+        try {
+
+            daoFactory.innitTransaction();
+            List<UserDomain> domainList = business.findAllUsers();
+            List<UserDTO> dtoList = UserDTOAssembler.getUserDTOAssembler().toDTOList(domainList);
+            return dtoList;
+
+        } catch (final NoseException exception){
+
+            throw exception;
+        } catch (final Exception exception){
+
+            var userMessage = MessagesEnum.USER_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+
+            throw NoseException.create(exception, userMessage, technicalMessage);
+
+        } finally {
+            daoFactory.closeConnection();
+        }
     }
 
     @Override
     public List<UserDTO> findUsersByFilter(UserDTO userFilters) {
-        return null;
+        var daoFactory = DAOFactory.getFactory();
+        var business = new UserBusinessImpl(daoFactory);
+        var domain = UserDTOAssembler.getUserDTOAssembler().toDomain(userFilters);
+        
+
+        try {
+
+            daoFactory.innitTransaction();
+            List<UserDomain> resultsList = business.findUsersByFilter(domain);
+            List<UserDTO> dtoList = UserDTOAssembler.getUserDTOAssembler().toDTOList(resultsList);
+            return dtoList;
+
+        } catch (final NoseException exception){
+
+            throw exception;
+        } catch (final Exception exception){
+
+            var userMessage = MessagesEnum.USER_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+
+            throw NoseException.create(exception, userMessage, technicalMessage);
+
+        } finally {
+            daoFactory.closeConnection();
+        }
     }
 
     @Override
     public UserDTO findSpecificUser(UUID userId) {
-        return null;
+
+        var daoFactory = DAOFactory.getFactory();
+        var business = new UserBusinessImpl(daoFactory);
+        
+
+        try {
+
+            daoFactory.innitTransaction();
+            UserDomain domain = business.findSpecificUser(userId);
+            UserDTO dto = UserDTOAssembler.getUserDTOAssembler().toDTO(domain);
+            return dto;
+
+        } catch (final NoseException exception){
+
+            throw exception;
+        } catch (final Exception exception){
+
+            var userMessage = MessagesEnum.USER_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED.getContent();
+
+            throw NoseException.create(exception, userMessage, technicalMessage);
+
+        } finally {
+            daoFactory.closeConnection();
+        }
     }
 
     @Override
