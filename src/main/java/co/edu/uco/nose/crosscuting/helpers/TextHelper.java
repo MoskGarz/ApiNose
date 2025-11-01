@@ -24,4 +24,20 @@ public final class TextHelper
 		return getDefault(value).trim();
 	}
 
+	public static Boolean isEmpty(final String value){
+		return EMPTY.equals(getDefault(value));
+	}
+
+	public static Boolean isEmptyWithTrim(final String value){
+		return EMPTY.equals(getDefaultWithTrim(value));
+	}
+
+	public static boolean isLenghtValid(final String value, final int min, final int max, boolean mustApplyTrim){
+		var length = (mustApplyTrim ? getDefaultWithTrim(value) : getDefault(value)).length();
+		return length >= min && length  <= max;
+	}
+
+	public static boolean isLenghtValidWithTrim(final String value, final int min, final int max){
+		return isLenghtValid(getDefaultWithTrim(value), min, max, true);
+	}
 }

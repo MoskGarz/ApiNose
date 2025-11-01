@@ -76,32 +76,6 @@ public class UserController {
 		return new ResponseEntity<>(responseObjectData, responseStatusCode);
 	}
 
-  /*  @GetMapping("/filter")
-    public ResponseEntity<Response<UserDTO>> findUsersByFilter( @RequestBody UserDTO userFilter){
-
-        Response<UserDTO> responseObjectData = Response.createSuccededResponse();
-		HttpStatusCode responseStatusCode = HttpStatus.OK;
-
-		try {
-			var facade = new UserFacadeImpl();
-			responseObjectData.setData(facade.findUsersByFilter(userFilter));
-			responseObjectData.addMessage("Users filtered succesfully!");
-		} catch (final NoseException exception) {
-			responseObjectData = Response.createFailedResponse();
-			responseObjectData.addMessage(exception.getUserMessage());
-			responseStatusCode = HttpStatus.BAD_REQUEST;
-			exception.printStackTrace();
-		} catch (final Exception exception) {
-			var userMessage = "Unexpected error";
-			responseObjectData = Response.createFailedResponse();
-			responseObjectData.addMessage(userMessage);
-			responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-			exception.printStackTrace();
-		}
-
-		return new ResponseEntity<>(responseObjectData, responseStatusCode);
-    } */
-
     @GetMapping("/{id}")
     public ResponseEntity<Response<UserDTO>> findSpecificUser( @PathVariable UUID id){
         

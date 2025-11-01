@@ -44,4 +44,8 @@ public final class UUIDHelper
 	{
 		return UUID.randomUUID();
 	}
+
+	public boolean isDefaultUUID(UUID id){
+		return id.equals(getDefault());
+	}
 }
