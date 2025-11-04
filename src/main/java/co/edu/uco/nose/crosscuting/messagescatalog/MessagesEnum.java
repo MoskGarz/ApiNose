@@ -19,6 +19,20 @@ public enum MessagesEnum {
     USER_ERROR_PERSISTENCE_UNEXPECTED("Problema inesperado de la aplicacion", "Se ha presentado un problema inesperado al interactuar con la fuente de informacion. Por favor, intente de nuevo y si el problema persiste contacte al administrador."),
     TECHNICAL_ERROR_PERSISTENCE_UNEXPECTED("Excepcion de logica no SQL en la capa DAO", "Se produjo una excepcion de logica o inesperada (NullPointer, etc.) en la capa DAO al tratar de ejecutar la operacion."),
 
+    USER_ERROR_RULE_NULL_PARAMS("Operacion fallida", "No se recibieron los parametros requeridos para ejecutar la regla/validador."),
+    TECHNICAL_ERROR_RULE_NULL_PARAMS("Parametros nulos", "Los parametros recibidos para ejecutar la regla/validador llegaron nulos."),
+    USER_ERROR_RULE_MISSING_PARAMS("Operacion fallida", "Llegaron menos parametros de los requeridos para ejecutar la regla/validador."),
+    TECHNICAL_ERROR_RULE_MISSING_PARAMS("Parametros incompletos", "Los parametros recibidos son insuficientes para ejecutar la regla/validador."),
+
+    USER_ERROR_REQUIRED_FIELD_MISSING("Dato requerido", "El dato es requerido para llevar a cabo la operacion."),
+    TECHNICAL_ERROR_REQUIRED_FIELD_MISSING("Campo requerido faltante", "La validacion de campo requerido no se cumplio."),
+    USER_ERROR_STRING_LENGTH_INVALID("Longitud invalida", "El dato no cumple la longitud minima y/o maxima permitida."),
+    TECHNICAL_ERROR_STRING_LENGTH_INVALID("Regla de longitud invalida", "La regla StringLengthIsValidRule no se cumplio para el dato proporcionado."),
+    USER_ERROR_FORMAT_INVALID("Formato invalido", "El dato no cumple el formato requerido."),
+    TECHNICAL_ERROR_FORMAT_INVALID("Regla de formato invalido", "La regla StringFormatValueIsValidRule no se cumplio para el dato proporcionado."),
+    USER_ERROR_INVALID_ID("Identificador invalido", "El identificador proporcionado no es valido."),
+    TECHNICAL_ERROR_INVALID_ID("ID invalido", "El identificador llego con el valor por defecto o no es valido."),
+
     USER_ERROR_VALIDATION_INVALID_ID_NUMBER("Numero de identificacion invalido", "El numero de identificacion debe contener unicamente digitos y no puede estar vacio."),
     TECHNICAL_ERROR_VALIDATION_INVALID_ID_NUMBER("Formato de telefono invalido", "El valor de 'numeroIdentificacion' no cumple con el patron de solo digitos."),
     USER_ERROR_VALIDATION_INVALID_FIRST_NAME("Nombre invalido", "El primer nombre contiene caracteres no permitidos o esta vacio."),
@@ -31,15 +45,32 @@ public enum MessagesEnum {
     TECHNICAL_ERROR_VALIDATION_INVALID_SECOND_LASTNAME("Formato de segundo apellido invalido", "El valor de 'segundoApellido' no cumple con el patron de solo letras."),
     USER_ERROR_VALIDATION_INVALID_PHONE_NUMBER("Numero de telefono invalido", "El numero de telefono debe contener unicamente digitos y no puede estar vacio."),
     TECHNICAL_ERROR_VALIDATION_INVALID_PHONE_NUMBER("Formato de telefono invalido", "El valor de 'numeroTelefonoMovil' no cumple con el patron de solo digitos."),
-    USER_ERROR_VALIDATION_INVALID_EMAIL("Correo electronico invalido", "El correo electronico no tiene un formato valido (usuario@dominio.ext)."),
+    USER_ERROR_VALIDATION_INVALID_EMAIL("Correo electronico invalido", "El correo electronico no tiene un formato valido (por ejemplo, usuario@dominio.ext)."),
     TECHNICAL_ERROR_VALIDATION_INVALID_EMAIL("Formato de correo invalido", "El valor de 'correoElectronico' no cumple con el patron basico usuario@dominio.ext."),
+    USER_ERROR_CITY_NOT_FOUND("Ciudad inexistente", "La ciudad que intentas buscar no existe"), 
+    TECHNICAL_ERROR_CITY_NOT_FOUND("Ciudad inexistente", "La ciudad que fue ingresada en la validacion de [CityExistsByIdRule] no existe"),
+    USER_ERROR_ID_TYPE_NOT_FOUND("Tipo de identificacion inexistente", "El Tipo de identificacion que intentas buscar no existe"), 
+    TECHNICAL_ERROR_ID_TYPE_NOT_FOUND("Tipo de identificacion inexistente", "El Tipo de identificacion que fue ingresado en la validacion de [IdTypeExistsByIdRule] no existe"),
 
     USER_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION("Identificacion duplicada", "Ya existe un usuario con el mismo tipo y numero de identificacion."),
     TECHNICAL_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION("Duplicado de identificacion", "Violacion de unicidad: tipoIdentificacion + numeroIdentificacion existentes."),
     USER_ERROR_VALIDATION_DUPLICATED_EMAIL("Correo electronico duplicado", "El correo electronico ya esta registrado."),
     TECHNICAL_ERROR_VALIDATION_DUPLICATED_EMAIL("Duplicado de correo", "Violacion de unicidad: correoElectronico existente."),
     USER_ERROR_VALIDATION_DUPLICATED_PHONE("Telefono duplicado", "El numero de telefono ya esta registrado."),
-    TECHNICAL_ERROR_VALIDATION_DUPLICATED_PHONE("Duplicado de telefono", "Violacion de unicidad: numeroTelefonoMovil existente.");
+    TECHNICAL_ERROR_VALIDATION_DUPLICATED_PHONE("Duplicado de telefono", "Violacion de unicidad: numeroTelefonoMovil existente."),
+    
+    USER_SUCCESS_USERS_FILTERED("Operación exitosa","Usuarios filtrados correctamente."),
+    USER_SUCCESS_USER_REGISTERED("Operación exitosa","Usuario registrado correctamente."),
+    USER_SUCCESS_USER_UPDATED("Operación exitosa","Usuario actualizado correctamente."),
+    USER_SUCCESS_USER_DELETED("Operación exitosa","Usuario eliminado correctamente."),
+    USER_SUCCESS_USER_FOUND("Operación exitosa","Usuario consultado correctamente."),
+
+    USER_ERROR_UPDATING_USER_NOT_FOUND("Usuario no encontrado","El usuario que se quiere editar no existe"),
+    TECHNICAL_ERROR_UPDATING_USER_NOT_FOUND("Usuario no encontrado","la funcion findById no logró encontrar el usuario que se quiere editar"),
+    USER_ERROR_DELETING_USER_NOT_FOUND("Usuario no encontrado","El usuario que se quiere eliminar no existe"),
+    TECHNICAL_ERROR_DELETING_USER_NOT_FOUND("Usuario no encontrado","la funcion findById no logró encontrar el usuario que se quiere eliminar"),
+
+    UNSUPORTED_OPERATION_MESSAGE("Operacion no implementada","Esta operacion aun no está implementada.");
 
     private String title;
     private String content;
@@ -65,4 +96,3 @@ public enum MessagesEnum {
         this.content = TextHelper.getDefaultWithTrim(content);
     }
 }
-

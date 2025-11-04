@@ -114,8 +114,7 @@ public final class UserFacadeImpl implements UserFacade {
 
             daoFactory.innitTransaction();
             List<UserDomain> domainList = business.findAllUsers();
-            List<UserDTO> dtoList = UserDTOAssembler.getUserDTOAssembler().toDTOList(domainList);
-            return dtoList;
+            return UserDTOAssembler.getUserDTOAssembler().toDTOList(domainList);
 
         } catch (final NoseException exception){
 
@@ -143,8 +142,7 @@ public final class UserFacadeImpl implements UserFacade {
 
             daoFactory.innitTransaction();
             List<UserDomain> resultsList = business.findUsersByFilter(domain);
-            List<UserDTO> dtoList = UserDTOAssembler.getUserDTOAssembler().toDTOList(resultsList);
-            return dtoList;
+            return UserDTOAssembler.getUserDTOAssembler().toDTOList(resultsList);
 
         } catch (final NoseException exception){
 
@@ -172,8 +170,7 @@ public final class UserFacadeImpl implements UserFacade {
 
             daoFactory.innitTransaction();
             UserDomain domain = business.findSpecificUser(userId);
-            UserDTO dto = UserDTOAssembler.getUserDTOAssembler().toDTO(domain);
-            return dto;
+            return UserDTOAssembler.getUserDTOAssembler().toDTO(domain);
 
         } catch (final NoseException exception){
 
@@ -191,22 +188,14 @@ public final class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void confirmMobileNumber(UUID userId, int confirmationCode) {
-
-    }
+    public void confirmMobileNumber(UUID userId, int confirmationCode){} 
 
     @Override
-    public void confirmEmail(UUID userid, int confirmationCode) {
-
-    }
+    public void confirmEmail(UUID userid, int confirmationCode) {}
 
     @Override
-    public void sendMobileNumberConfirmation(UUID userId) {
-
-    }
+    public void sendMobileNumberConfirmation(UUID userId) {}
 
     @Override
-    public void sendEmailConfirmation(UUID userId) {
-
-    }
+    public void sendEmailConfirmation(UUID userId) {}
 }

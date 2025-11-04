@@ -7,12 +7,14 @@ import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.factory.DAOFactory;
+import co.edu.uco.nose.entity.IdentificationTypeEntity;
 import co.edu.uco.nose.entity.UserEntity;
 
-public class UserMobileNumberDoesNotExistRule implements Rule{
-    private static final Rule instance = new UserMobileNumberDoesNotExistRule();
+public class UserDoesNotExistWithSameIdNumberAndIdTypeRule implements Rule{
+    
+    private static final Rule instance = new UserDoesNotExistWithSameIdNumberAndIdTypeRule();
 
-    private UserMobileNumberDoesNotExistRule(){
+    private UserDoesNotExistWithSameIdNumberAndIdTypeRule(){
 
     }
 
@@ -25,28 +27,34 @@ public class UserMobileNumberDoesNotExistRule implements Rule{
 
         if (ObjectHelper.isNull(data)) {
             var userMessage = MessagesEnum.USER_ERROR_RULE_NULL_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent() + " [UserMobileNumberDoesNotExistRule]";
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent() .concat( " [UserDoesNotExistWithSameIdNumberAndIdTypeRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
-        if (data.length<2) {
+        if (data.length<3) {
             var userMessage = MessagesEnum.USER_ERROR_RULE_MISSING_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent() + " [UserMobileNumberDoesNotExistRule]";
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().concat( " [UserDoesNotExistWithSameIdNumberAndIdTypeRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
-        var mobileNumber = (String) data[0];
-        var daoFactory = (DAOFactory) data[1];
+        var idType = (IdentificationTypeEntity) data[0];
+        var idNumber = (String) data[1];
+        var daoFactory = (DAOFactory) data[2];
 
         UserEntity userFilter = new UserEntity();
-        userFilter.setPhoneNumber(mobileNumber);
+        userFilter.setIdentificationType(idType);
+        userFilter.setIdentificationNumber(idNumber);
 
         List<UserEntity> matches = daoFactory.getUserDAO().findByFilter(userFilter);
         if (!matches.isEmpty()) {
-            var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_PHONE.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_PHONE.getContent();
+            var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION.getContent().concat(" [UserDoesNotExistWithSameIdNumberAndIdTypeRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
+
+
+        
     }
+  
     
 }

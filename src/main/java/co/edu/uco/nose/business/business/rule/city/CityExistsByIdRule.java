@@ -1,4 +1,4 @@
-package co.edu.uco.nose.business.business.rule.idtype;
+package co.edu.uco.nose.business.business.rule.city;
 
 import java.util.UUID;
 
@@ -8,13 +8,13 @@ import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helpers.UUIDHelper;
 import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 import co.edu.uco.nose.data.dao.factory.DAOFactory;
-import co.edu.uco.nose.entity.IdentificationTypeEntity;
+import co.edu.uco.nose.entity.CityEntity;
 
-public class IdTypeExistsByIdRule implements Rule {
+public class CityExistsByIdRule implements Rule {
 
-    private static final Rule instance = new IdTypeExistsByIdRule();
+    private static final Rule instance = new CityExistsByIdRule();
 
-    private IdTypeExistsByIdRule(){
+    private CityExistsByIdRule(){
 
     }
 
@@ -27,24 +27,24 @@ public class IdTypeExistsByIdRule implements Rule {
 
         if (ObjectHelper.isNull(data)) {
             var userMessage = MessagesEnum.USER_ERROR_RULE_NULL_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent() .concat(" [IdTypeExistsByIdRule]");
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().concat( " [CityExistsByIdRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<2) {
             var userMessage = MessagesEnum.USER_ERROR_RULE_MISSING_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent() .concat( " [IdTypeExistsByIdRule]");
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent() .concat( " [CityExistsByIdRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         var id = (UUID) data[0];
         var daoFactory = (DAOFactory) data[1];
 
-        IdentificationTypeEntity idType = daoFactory.getIdentificationTypeDAO().findById(id);
+        CityEntity idType = daoFactory.getCityDAO().findById(id);
 
         if(UUIDHelper.getUUIDHelper().isDefaultUUID(idType.getId())){
-            var userMessage = MessagesEnum.USER_ERROR_ID_TYPE_NOT_FOUND.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_ID_TYPE_NOT_FOUND.getContent();
+            var userMessage = MessagesEnum.USER_ERROR_CITY_NOT_FOUND.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_CITY_NOT_FOUND.getContent();
             throw NoseException.create(userMessage, technicalMessage);
         }
     }

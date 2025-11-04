@@ -2,8 +2,16 @@ package co.edu.uco.nose.business.business.impl;
 
 import static co.edu.uco.nose.business.assembler.entity.impl.UserEntityAssembler.getUserEntityAssembler;
 
+import co.edu.uco.nose.business.assembler.entity.impl.IdentificationTypeEntityAssembler;
 import co.edu.uco.nose.business.assembler.entity.impl.UserEntityAssembler;
 import co.edu.uco.nose.business.business.UserBusiness;
+import co.edu.uco.nose.business.business.validator.city.ValidateCityExistById;
+import co.edu.uco.nose.business.business.validator.idtype.ValidateIdTypeExistById;
+import co.edu.uco.nose.business.business.validator.user.ValidateUserMobileNumberDoesNotExist;
+import co.edu.uco.nose.business.business.validator.user.ValidateUserEmailDoesNotExist;
+import co.edu.uco.nose.business.business.validator.user.ValidateUserDoesNotExistWithSameIdNumberAndIdType;
+import co.edu.uco.nose.business.business.validator.user.ValidateDataUserConsistencyForFindUserByFilter;
+import co.edu.uco.nose.business.business.validator.user.ValidateDataUserConsistencyForRegisterNewUserInformation;
 import co.edu.uco.nose.business.domain.UserDomain;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helpers.UUIDHelper;
@@ -26,12 +34,14 @@ public final class UserBusinessImpl implements UserBusiness {
     @Override
     public void registerNewUser(UserDomain userDomain) {
 
-        validateDataConsistency(userDomain);
+        ValidateDataUserConsistencyForRegisterNewUserInformation.executeValidation(userDomain);
+        ValidateIdTypeExistById.executeValidation(userDomain.getIdentificationType().getId(), daoFactory);
+        ValidateCityExistById.executeValidation(userDomain.getCity().getId(), daoFactory);
 
-        ensureIdentificationIsUnique(userDomain);
-        ensureEmailIsUnique(userDomain);
-        ensurePhoneIsUnique(userDomain);
-
+        var idTypeEntity = IdentificationTypeEntityAssembler.getIdentificationTypeEntityAssembler().toEntity(userDomain.getIdentificationType());
+        ValidateUserDoesNotExistWithSameIdNumberAndIdType.executeValidation(idTypeEntity, userDomain.getIdentificationNumber(), daoFactory);
+        ValidateUserEmailDoesNotExist.executeValidation(userDomain.getEmail(), daoFactory);
+        ValidateUserMobileNumberDoesNotExist.executeValidation(userDomain.getPhoneNumber(), daoFactory);
         var userId = generateUniqueUserId();
 
         var userEntity = getUserEntityAssembler().toEntity(userDomain);
@@ -50,8 +60,8 @@ public final class UserBusinessImpl implements UserBusiness {
         else{
             throw NoseException
             .create(
-            "El usuario que se quiere eliminar no existe", 
-            "la funcion findById no logró encontrar el usuario que se quiere eliminar");
+            MessagesEnum.USER_ERROR_DELETING_USER_NOT_FOUND.getContent(), 
+            MessagesEnum.TECHNICAL_ERROR_DELETING_USER_NOT_FOUND.getContent());
         }
         
     }
@@ -88,8 +98,8 @@ public final class UserBusinessImpl implements UserBusiness {
         else{
             throw NoseException
             .create(
-            "El usuario que se quiere editar no existe", 
-            "la funcion findById no logró encontrar el usuario que se quiere editar");
+            MessagesEnum.USER_ERROR_UPDATING_USER_NOT_FOUND.getContent(), 
+            MessagesEnum.TECHNICAL_ERROR_UPDATING_USER_NOT_FOUND.getContent());
         }
         
 
@@ -103,6 +113,16 @@ public final class UserBusinessImpl implements UserBusiness {
 
     @Override
     public List<UserDomain> findUsersByFilter(UserDomain userFilters) {
+
+        if (!UUIDHelper.getUUIDHelper().isDefaultUUID(userFilters.getIdentificationType().getId())) {
+            ValidateIdTypeExistById.executeValidation(userFilters.getIdentificationType().getId(), daoFactory);
+        }
+        if (!UUIDHelper.getUUIDHelper().isDefaultUUID(userFilters.getCity().getId())) {
+            ValidateCityExistById.executeValidation(userFilters.getCity().getId(), daoFactory);
+        }
+        ValidateDataUserConsistencyForFindUserByFilter.executeValidation(userFilters);
+
+
         var filterEntity = UserEntityAssembler.getUserEntityAssembler().toEntity(userFilters);
         var userEntityList = daoFactory.getUserDAO().findByFilter(filterEntity);
         return UserEntityAssembler.getUserEntityAssembler().toDomainList(userEntityList);
@@ -114,57 +134,15 @@ public final class UserBusinessImpl implements UserBusiness {
         return UserEntityAssembler.getUserEntityAssembler().toDomain(userEntity);
     }
 
-    private void ensureIdentificationIsUnique(final UserDomain userDomain) {
-        var filter = new UserEntity();
-        var idType = new IdentificationTypeEntity();
-        idType.setId(userDomain.getIdentificationType().getId());
-        filter.setIdentificationType(idType);
-        filter.setIdentificationNumber(userDomain.getIdentificationNumber());
-
-        List<UserEntity> matches = daoFactory.getUserDAO().findByFilter(filter);
-        if (!matches.isEmpty()) {
-            var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_IDENTIFICATION.getContent();
-            throw co.edu.uco.nose.crosscuting.exception.NoseException.create(userMessage, technicalMessage);
-        }
-    }
-
-    private void ensureEmailIsUnique(final UserDomain userDomain) {
-        var filter = new UserEntity();
-        filter.setEmail(userDomain.getEmail());
-
-        List<UserEntity> matches = daoFactory.getUserDAO().findByFilter(filter);
-        if (!matches.isEmpty()) {
-            var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_EMAIL.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_EMAIL.getContent();
-            throw co.edu.uco.nose.crosscuting.exception.NoseException.create(userMessage, technicalMessage);
-        }
-    }
-
-    private void ensurePhoneIsUnique(final UserDomain userDomain) {
-        var filter = new UserEntity();
-        filter.setPhoneNumber(userDomain.getPhoneNumber());
-
-        List<UserEntity> matches = daoFactory.getUserDAO().findByFilter(filter);
-        if (!matches.isEmpty()) {
-            var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_PHONE.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_PHONE.getContent();
-            throw co.edu.uco.nose.crosscuting.exception.NoseException.create(userMessage, technicalMessage);
-        }
-    }
-
     private UUID generateUniqueUserId() {
-        UUID newId;
-        do {
-            newId = UUIDHelper.getUUIDHelper().generateNewUUID();
-            var idFilter = new UserEntity();
-            idFilter.setId(newId);
-            var exists = !daoFactory.getUserDAO().findByFilter(idFilter).isEmpty();
-            if (!exists) {
-                break;
-            }
-        } while (true);
-        return newId;
+        var id = UUIDHelper.getUUIDHelper().generateNewUUID();
+        var userEntity = daoFactory.getUserDAO().findById(id);
+
+        while (!UUIDHelper.getUUIDHelper().isDefaultUUID(userEntity.getId())){
+            id = UUIDHelper.getUUIDHelper().generateNewUUID();
+            userEntity = daoFactory.getUserDAO().findById(id);
+        } 
+        return id;
     }
 
     private void validateDataConsistency(final UserDomain userDomain) {
@@ -263,22 +241,22 @@ public final class UserBusinessImpl implements UserBusiness {
 
     @Override
     public void confirmMobileNumber(UUID userId, int confirmationCode) {
-
+       throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
     }
 
     @Override
     public void confirmEmail(UUID userid, int confirmationCode) {
-
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
     }
 
     @Override
     public void sendMobileNumberConfirmation(UUID userId) {
-
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
     }
 
     @Override
     public void sendEmailConfirmation(UUID userId) {
-
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
     }
 
 

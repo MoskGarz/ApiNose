@@ -33,13 +33,13 @@ public final class StringValueIsPresentRule implements Rule{
 
         var stringData = (String) data[0];
         var dataName = (String) data[1];
-        var mustApplyTrim = (boolean) data[2];
+        boolean mustApplyTrim = (Boolean) data[2];
 
-        if((mustApplyTrim)
+        if(Boolean.TRUE.equals((mustApplyTrim)
             ?TextHelper.isEmptyWithTrim(stringData)
-                :TextHelper.isEmpty(stringData)) {
+                :TextHelper.isEmpty(stringData))) {
             
-            var userMessage = "el dato [".concat(dataName).concat("] es requerido para llevar a cabo la operacion");
+            var userMessage = "El dato [".concat(dataName).concat("] es requerido para llevar a cabo la operacion");
             var technicalMessage = "La regla StringValueIsPresentRule fallo porque el dato [".concat(dataName).concat("] era requerido y no llegó");
             throw NoseException.create(userMessage, technicalMessage);
         }
