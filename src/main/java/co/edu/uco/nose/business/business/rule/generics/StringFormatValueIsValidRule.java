@@ -23,14 +23,14 @@ public class StringFormatValueIsValidRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.USER_ERROR_RULE_NULL_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().concat( " [StringFormatValueIsValidRule]");
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().replace("regla/validador", "regla [StringFormatValueIsValidRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<5) {
-            var userMessage = MessagesEnum.USER_ERROR_RULE_MISSING_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().concat( " [StringFormatValueIsValidRule]");
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().replace("regla/validador", "regla [StringFormatValueIsValidRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
@@ -48,7 +48,7 @@ public class StringFormatValueIsValidRule implements Rule {
 
         if (!Pattern.compile(pattern).matcher(candidate).matches()) {
             var userMessage = MessagesEnum.USER_ERROR_FORMAT_INVALID.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_FORMAT_INVALID.getContent().concat( " [StringFormatValueIsValidRule] dato=" ).concat( dataName).concat( ", patron=").concat(  pattern);
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_FORMAT_INVALID.getContent().concat( dataName).concat( ", patron=").concat(  pattern);
             throw NoseException.create(userMessage, technicalMessage);
         }
     }

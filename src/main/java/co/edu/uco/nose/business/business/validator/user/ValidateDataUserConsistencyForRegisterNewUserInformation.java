@@ -8,6 +8,7 @@ import co.edu.uco.nose.business.domain.UserDomain;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helpers.TextHelper;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 
 public class ValidateDataUserConsistencyForRegisterNewUserInformation implements Validator {
     
@@ -25,14 +26,14 @@ public class ValidateDataUserConsistencyForRegisterNewUserInformation implements
     public void validate(final Object... data){
         
         if (ObjectHelper.isNull(data)) {
-            var userMessage = "Se ha presentado un problema inesperado tratando de llevar a cabo la operacion";
-            var technicalMessage = "No se recibieron los parametros requeridos para ejecutar la validacion ValidateDataUserConsistencyForRegisterNewUserInformation";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().replace("la regla/validador", "el validador [ValidateDataUserConsistencyForRegisterNewUserInformation]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<1) {
-            var userMessage = "Se ha presentado un problema inesperado tratando de llevar a cabo la operacion";
-            var technicalMessage = "Llegaron menos parametros de los requeridos para ejecutar la validacion ValidateDataUserConsistencyForRegisterNewUserInformation";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().replace("la regla/validador", "el validador [ValidateDataUserConsistencyForRegisterNewUserInformation]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 

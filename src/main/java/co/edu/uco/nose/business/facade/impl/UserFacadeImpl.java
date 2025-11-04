@@ -188,14 +188,22 @@ public final class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void confirmMobileNumber(UUID userId, int confirmationCode){} 
+    public void confirmMobileNumber(UUID userId, int confirmationCode){
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
+    } 
 
     @Override
-    public void confirmEmail(UUID userid, int confirmationCode) {}
+    public void confirmEmail(UUID userid, int confirmationCode) {
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
+    }
 
     @Override
-    public void sendMobileNumberConfirmation(UUID userId) {}
+    public void sendMobileNumberConfirmation(UUID userId) {
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
+    }
 
     @Override
-    public void sendEmailConfirmation(UUID userId) {}
+    public void sendEmailConfirmation(UUID userId) {
+        throw new UnsupportedOperationException(MessagesEnum.UNSUPORTED_OPERATION_MESSAGE.getContent());
+    }
 }

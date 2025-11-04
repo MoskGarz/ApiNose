@@ -22,14 +22,14 @@ public class StringLengthIsValidRule implements Rule{
     public void execute(final Object... data){
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.USER_ERROR_RULE_NULL_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().concat(" [StringLengthIsValidRule]");
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().replace("regla/validador", "regla [StringLengthIsValidRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<5) {
-            var userMessage = MessagesEnum.USER_ERROR_RULE_MISSING_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().concat( " [StringLengthIsValidRule]");
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().replace("regla/validador", "regla [StringLengthIsValidRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
     
@@ -41,7 +41,7 @@ public class StringLengthIsValidRule implements Rule{
 
         if (!TextHelper.isLenghtValid(stringData, min, max, mustApplyTrim)) {
             var userMessage = MessagesEnum.USER_ERROR_STRING_LENGTH_INVALID.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_STRING_LENGTH_INVALID.getContent().concat(" [StringLengthIsValidRule] dato=" ).concat( dataName ).concat(", rango=[" ).concat(String.valueOf(min)).concat(",").concat( String.valueOf(max)).concat("]");
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_STRING_LENGTH_INVALID.getContent().concat( dataName ).concat(", rango=[" ).concat(String.valueOf(min)).concat(",").concat( String.valueOf(max)).concat("]");
             throw NoseException.create(userMessage, technicalMessage);
         }
     }

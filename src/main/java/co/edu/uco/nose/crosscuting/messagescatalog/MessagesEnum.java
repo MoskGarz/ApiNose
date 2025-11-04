@@ -24,8 +24,9 @@ public enum MessagesEnum {
     USER_ERROR_RULE_MISSING_PARAMS("Operacion fallida", "Llegaron menos parametros de los requeridos para ejecutar la regla/validador."),
     TECHNICAL_ERROR_RULE_MISSING_PARAMS("Parametros incompletos", "Los parametros recibidos son insuficientes para ejecutar la regla/validador."),
 
-    USER_ERROR_REQUIRED_FIELD_MISSING("Dato requerido", "El dato es requerido para llevar a cabo la operacion."),
-    TECHNICAL_ERROR_REQUIRED_FIELD_MISSING("Campo requerido faltante", "La validacion de campo requerido no se cumplio."),
+    USER_ERROR_UNEXPECTED_RULE_ERROR("Error inesperado","Se ha presentado un problema inesperado tratando de llevar a cabo la operacion"),
+    USER_ERROR_REQUIRED_FIELD_MISSING("Dato requerido", "El dato [variable] es requerido para llevar a cabo la operacion."),
+    TECHNICAL_ERROR_REQUIRED_FIELD_MISSING("Campo requerido faltante", "La validacion de campo requerido no se cumplio porque [variable] llego vacio."),
     USER_ERROR_STRING_LENGTH_INVALID("Longitud invalida", "El dato no cumple la longitud minima y/o maxima permitida."),
     TECHNICAL_ERROR_STRING_LENGTH_INVALID("Regla de longitud invalida", "La regla StringLengthIsValidRule no se cumplio para el dato proporcionado."),
     USER_ERROR_FORMAT_INVALID("Formato invalido", "El dato no cumple el formato requerido."),
@@ -65,6 +66,10 @@ public enum MessagesEnum {
     USER_SUCCESS_USER_DELETED("Operación exitosa","Usuario eliminado correctamente."),
     USER_SUCCESS_USER_FOUND("Operación exitosa","Usuario consultado correctamente."),
 
+    USER_ERROR_DEFAULT_ID_DETECTED("ID por defecto detectado","El identificador de [la varaible] es invalido"),
+    TECHNICAL_ERROR_DEFAULT_ID_DETECTED("ID por defecto detectado","idValueIsNotDefaultValueRule falló: [la variable] llego con un id por defecto"),
+    USER_ERROR_GENERAL_USER_NOT_FOUND("Usuario no encontrado","El usuario deseado no existe."),
+    TECHNICAL_ERROR_GENERAL_USER_NOT_FOUND("Usuario no encontrado","El usuario con id [identificador] no existe."),
     USER_ERROR_UPDATING_USER_NOT_FOUND("Usuario no encontrado","El usuario que se quiere editar no existe"),
     TECHNICAL_ERROR_UPDATING_USER_NOT_FOUND("Usuario no encontrado","la funcion findById no logró encontrar el usuario que se quiere editar"),
     USER_ERROR_DELETING_USER_NOT_FOUND("Usuario no encontrado","El usuario que se quiere eliminar no existe"),

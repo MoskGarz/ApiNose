@@ -6,6 +6,7 @@ import co.edu.uco.nose.business.business.rule.Rule;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helpers.UUIDHelper;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 
 public class idValueIsNotDefaultValueRule implements Rule{
     
@@ -24,14 +25,14 @@ public class idValueIsNotDefaultValueRule implements Rule{
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = "Se ha presentado un problema inesperado tratando de llevar a cabo la operacion";
-            var technicalMessage = "No se recibieron los parametros requeridos para ejecutar la regla idValueIsNotDefaultValueRule";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().replace("regla/validador", "regla [idValueIsNotDefaultValueRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<2) {
-            var userMessage = "Se ha presentado un problema inesperado tratando de llevar a cabo la operacion";
-            var technicalMessage = "Llegaron menos parametros de los requeridos para ejecutar la regla idValueIsNotDefaultValueRule";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().replace("regla/validador", "regla [idValueIsNotDefaultValueRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
@@ -39,8 +40,8 @@ public class idValueIsNotDefaultValueRule implements Rule{
         var dataName = (String) data[1];
 
         if (UUIDHelper.getUUIDHelper().getDefault().equals(id)) {
-            var userMessage = "El identificador de [".concat(dataName).concat("] es inválido");
-            var technicalMessage = "idValueIsNotDefaultValueRule fallo: [" .concat(dataName).concat("] llegó con el UUID por defecto");
+            var userMessage = MessagesEnum.USER_ERROR_DEFAULT_ID_DETECTED.getContent().replace("la variable", dataName);
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_DEFAULT_ID_DETECTED.getContent().replace("la variable", dataName); 
             throw NoseException.create(userMessage, technicalMessage);
         }
     }

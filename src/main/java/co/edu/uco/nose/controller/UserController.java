@@ -47,7 +47,6 @@ public class UserController {
         @RequestParam(name = "city-id", required = false) UUID cityId
 
     ){
-    
 
 		Response<UserDTO> responseObjectData = Response.createSuccededResponse();
 		HttpStatusCode responseStatusCode = HttpStatus.OK;
@@ -63,7 +62,6 @@ public class UserController {
             userDTO.setEmail(email);
             userDTO.setPhoneNumber(phoneNumber);
             userDTO.setCity(new CityDTO(cityId));
-            
 
             var facade = new UserFacadeImpl();
 			responseObjectData.setData(facade.findUsersByFilter(userDTO));
@@ -121,8 +119,6 @@ public class UserController {
             facade.registerNewUser(user);
 			responseObjectData.addMessage(MessagesEnum.USER_SUCCESS_USER_REGISTERED.getContent());
             
-		    
-
 		} catch (final NoseException exception) {
 			responseObjectData = Response.createFailedResponse();
 			responseObjectData.addMessage(exception.getUserMessage());
@@ -149,8 +145,6 @@ public class UserController {
             facade.updateUserInformation(id, user);
 			responseObjectData.addMessage(MessagesEnum.USER_SUCCESS_USER_UPDATED.getContent());
             
-		    
-
 		} catch (final NoseException exception) {
 			responseObjectData = Response.createFailedResponse();
 			responseObjectData.addMessage(exception.getUserMessage());
@@ -175,9 +169,7 @@ public class UserController {
 		try {
 			var facade = new UserFacadeImpl();
             facade.dropUser(id);
-			responseObjectData.addMessage(MessagesEnum.USER_SUCCESS_USER_DELETED.getContent());
-            
-		    
+			responseObjectData.addMessage(MessagesEnum.USER_SUCCESS_USER_DELETED.getContent());  
 
 		} catch (final NoseException exception) {
 			responseObjectData = Response.createFailedResponse();

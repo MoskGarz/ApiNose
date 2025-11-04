@@ -4,6 +4,7 @@ import co.edu.uco.nose.business.business.rule.Rule;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
 import co.edu.uco.nose.crosscuting.helpers.ObjectHelper;
 import co.edu.uco.nose.crosscuting.helpers.TextHelper;
+import co.edu.uco.nose.crosscuting.messagescatalog.MessagesEnum;
 
 public final class StringValueIsPresentRule implements Rule{
 
@@ -19,15 +20,16 @@ public final class StringValueIsPresentRule implements Rule{
 
     @Override
     public void execute(final Object... data){
+
         if (ObjectHelper.isNull(data)) {
-            var userMessage = "Se ha presentado un problema inesperado tratando de llevar a cabo la operacion";
-            var technicalMessage = "No se recibieron los parametros requeridos para ejecutar la regla StringValueIsPresentRule";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().replace("regla/validador", "regla [StringValueIsPresentRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<3) {
-            var userMessage = "Se ha presentado un problema inesperado tratando de llevar a cabo la operacion";
-            var technicalMessage = "Llegaron menos parametros de los requeridos para ejecutar la regla StringValueIsPresentRule";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().replace("regla/validador", "regla [StringValueIsPresentRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
@@ -39,8 +41,8 @@ public final class StringValueIsPresentRule implements Rule{
             ?TextHelper.isEmptyWithTrim(stringData)
                 :TextHelper.isEmpty(stringData))) {
             
-            var userMessage = "El dato [".concat(dataName).concat("] es requerido para llevar a cabo la operacion");
-            var technicalMessage = "La regla StringValueIsPresentRule fallo porque el dato [".concat(dataName).concat("] era requerido y no llegó");
+            var userMessage = MessagesEnum.USER_ERROR_REQUIRED_FIELD_MISSING.getContent().replace("variable", dataName);
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_REQUIRED_FIELD_MISSING.getContent().replace("variable", dataName);
             throw NoseException.create(userMessage, technicalMessage);
         }
     }

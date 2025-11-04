@@ -25,14 +25,14 @@ public class UserEmailDoesNotExistRule implements Rule {
     public void execute(final Object... data){
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.USER_ERROR_RULE_NULL_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent() + " [UserEmailDoesNotExistRule]";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_NULL_PARAMS.getContent().replace("regla/validador", "regla [UserEmailDoesNotExistRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
         if (data.length<2) {
-            var userMessage = MessagesEnum.USER_ERROR_RULE_MISSING_PARAMS.getContent();
-            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent() + " [UserEmailDoesNotExistRule]";
+            var userMessage = MessagesEnum.USER_ERROR_UNEXPECTED_RULE_ERROR.getContent();
+            var technicalMessage = MessagesEnum.TECHNICAL_ERROR_RULE_MISSING_PARAMS.getContent().replace("regla/validador", "regla [UserEmailDoesNotExistRule]");
             throw NoseException.create(userMessage, technicalMessage);
         }
 
@@ -46,7 +46,7 @@ public class UserEmailDoesNotExistRule implements Rule {
         if (!matches.isEmpty()) {
             var userMessage = MessagesEnum.USER_ERROR_VALIDATION_DUPLICATED_EMAIL.getContent();
             var technicalMessage = MessagesEnum.TECHNICAL_ERROR_VALIDATION_DUPLICATED_EMAIL.getContent();
-            throw co.edu.uco.nose.crosscuting.exception.NoseException.create(userMessage, technicalMessage);
+            throw NoseException.create(userMessage, technicalMessage);
         }
     }
 }

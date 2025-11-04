@@ -156,44 +156,40 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         }
 
         if(!TextHelper.getDefaultWithTrim(filterEntity.getFirstName()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.primerNombre = ? ");
             parameters.add(filterEntity.getFirstName());
         }
 
-        // Tipo de identificación (id)
         if(filterEntity.getIdentificationType() != null &&
                 !filterEntity.getIdentificationType().getId().equals(UUIDHelper.getUUIDHelper().getDefault())){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("ti.id = ? ");
             parameters.add(filterEntity.getIdentificationType().getId());
         }
 
-        // Número de identificación
         if(!TextHelper.getDefaultWithTrim(filterEntity.getIdentificationNumber()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.numeroIdentificacion = ? ");
             parameters.add(filterEntity.getIdentificationNumber());
         }
 
-        // Segundo nombre
         if(!TextHelper.getDefaultWithTrim(filterEntity.getSecondName()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.segundoNombre = ? ");
             parameters.add(filterEntity.getSecondName());
         }
 
-        // Apellidos
         if(!TextHelper.getDefaultWithTrim(filterEntity.getFirstLastname()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.primerApellido = ? ");
@@ -201,44 +197,40 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         }
 
         if(!TextHelper.getDefaultWithTrim(filterEntity.getSecondLastname()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.segundoApellido = ? ");
             parameters.add(filterEntity.getSecondLastname());
         }
 
-        // Ciudad (id)
         if(filterEntity.getCity() != null &&
                 !filterEntity.getCity().getId().equals(UUIDHelper.getUUIDHelper().getDefault())){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("c.id = ? ");
             parameters.add(filterEntity.getCity().getId());
         }
 
-        // Correo electrónico
         if(!TextHelper.getDefaultWithTrim(filterEntity.getEmail()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.correoElectronico = ? ");
             parameters.add(filterEntity.getEmail());
         }
 
-        // Número de teléfono móvil
         if(!TextHelper.getDefaultWithTrim(filterEntity.getPhoneNumber()).isEmpty()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.numeroTelefonoMovil = ? ");
             parameters.add(filterEntity.getPhoneNumber());
         }
 
-        // Confirmaciones (solo si el valor fue establecido explícitamente)
         if(filterEntity.getIsEmailVerifiedDefaultValue() != null && !filterEntity.getIsEmailVerifiedDefaultValue()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.correoElectronicoConfirmado = ? ");
@@ -246,14 +238,14 @@ public final class UserSqlServerDAO extends SqlConnection implements UserDAO {
         }
 
         if(filterEntity.getIsPhoneNumberVerifiedDefaultValue() != null && !filterEntity.getIsPhoneNumberVerifiedDefaultValue()){
-            if(where.length() > 0){
+            if(!where.isEmpty()){
                 where.append("AND ");
             }
             where.append("u.numeroTelefonoMovilConfirmado = ? ");
             parameters.add(filterEntity.getPhoneNumberVerified());
         }
 
-        if (where.length() > 0) {
+        if (!where.isEmpty()) {
             sql.append("WHERE ").append(where);
         }
 
