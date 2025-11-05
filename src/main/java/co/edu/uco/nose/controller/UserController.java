@@ -44,8 +44,9 @@ public class UserController {
         @RequestParam(name = "second-last-name", required = false) String secondLastName,
         @RequestParam(name = "email", required = false) String email,
         @RequestParam(name = "phone-number", required = false) String phoneNumber,
-        @RequestParam(name = "city-id", required = false) UUID cityId
-
+        @RequestParam(name = "city-id", required = false) UUID cityId,
+		@RequestParam(name = "is-email-confirmed", required = false) Boolean emailConfirmed,
+		@RequestParam(name = "is-phone-number-confirmed", required = false) Boolean phoneNumberConfirmed
     ){
 
 		Response<UserDTO> responseObjectData = Response.createSuccededResponse();
@@ -62,6 +63,8 @@ public class UserController {
             userDTO.setEmail(email);
             userDTO.setPhoneNumber(phoneNumber);
             userDTO.setCity(new CityDTO(cityId));
+			userDTO.setEmailVerified(emailConfirmed);
+			userDTO.setPhoneNumberVerified(phoneNumberConfirmed);
 
             var facade = new UserFacadeImpl();
 			responseObjectData.setData(facade.findUsersByFilter(userDTO));

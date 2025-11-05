@@ -47,7 +47,7 @@ public class StringFormatValueIsValidRule implements Rule {
         }
 
         if (!Pattern.compile(pattern).matcher(candidate).matches()) {
-            var userMessage = MessagesEnum.USER_ERROR_FORMAT_INVALID.getContent();
+            var userMessage = MessagesEnum.USER_ERROR_FORMAT_INVALID.getContent().replace("dato", dataName);
             var technicalMessage = MessagesEnum.TECHNICAL_ERROR_FORMAT_INVALID.getContent().concat( dataName).concat( ", patron=").concat(  pattern);
             throw NoseException.create(userMessage, technicalMessage);
         }

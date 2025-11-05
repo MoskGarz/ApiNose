@@ -27,7 +27,7 @@ public enum MessagesEnum {
     USER_ERROR_UNEXPECTED_RULE_ERROR("Error inesperado","Se ha presentado un problema inesperado tratando de llevar a cabo la operacion"),
     USER_ERROR_REQUIRED_FIELD_MISSING("Dato requerido", "El dato [variable] es requerido para llevar a cabo la operacion."),
     TECHNICAL_ERROR_REQUIRED_FIELD_MISSING("Campo requerido faltante", "La validacion de campo requerido no se cumplio porque [variable] llego vacio."),
-    USER_ERROR_STRING_LENGTH_INVALID("Longitud invalida", "El dato no cumple la longitud minima y/o maxima permitida."),
+    USER_ERROR_STRING_LENGTH_INVALID("Longitud invalida", "El dato no cumple la longitud minima y/o maxima permitida (rango)."),
     TECHNICAL_ERROR_STRING_LENGTH_INVALID("Regla de longitud invalida", "La regla StringLengthIsValidRule no se cumplio para el dato proporcionado."),
     USER_ERROR_FORMAT_INVALID("Formato invalido", "El dato no cumple el formato requerido."),
     TECHNICAL_ERROR_FORMAT_INVALID("Regla de formato invalido", "La regla StringFormatValueIsValidRule no se cumplio para el dato proporcionado."),
@@ -66,7 +66,7 @@ public enum MessagesEnum {
     USER_SUCCESS_USER_DELETED("Operación exitosa","Usuario eliminado correctamente."),
     USER_SUCCESS_USER_FOUND("Operación exitosa","Usuario consultado correctamente."),
 
-    USER_ERROR_DEFAULT_ID_DETECTED("ID por defecto detectado","El identificador de [la varaible] es invalido"),
+    USER_ERROR_DEFAULT_ID_DETECTED("ID por defecto detectado","El identificador de [la variable] es un dato obligatorio"),
     TECHNICAL_ERROR_DEFAULT_ID_DETECTED("ID por defecto detectado","idValueIsNotDefaultValueRule falló: [la variable] llego con un id por defecto"),
     USER_ERROR_GENERAL_USER_NOT_FOUND("Usuario no encontrado","El usuario deseado no existe."),
     TECHNICAL_ERROR_GENERAL_USER_NOT_FOUND("Usuario no encontrado","El usuario con id [identificador] no existe."),

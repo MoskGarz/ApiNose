@@ -40,7 +40,7 @@ public class StringLengthIsValidRule implements Rule{
         var mustApplyTrim = (boolean) data[4];
 
         if (!TextHelper.isLenghtValid(stringData, min, max, mustApplyTrim)) {
-            var userMessage = MessagesEnum.USER_ERROR_STRING_LENGTH_INVALID.getContent();
+            var userMessage = MessagesEnum.USER_ERROR_STRING_LENGTH_INVALID.getContent().replace("rango", String.valueOf(min).concat(" a ").concat(String.valueOf(max)).concat(" caracteres"));
             var technicalMessage = MessagesEnum.TECHNICAL_ERROR_STRING_LENGTH_INVALID.getContent().concat( dataName ).concat(", rango=[" ).concat(String.valueOf(min)).concat(",").concat( String.valueOf(max)).concat("]");
             throw NoseException.create(userMessage, technicalMessage);
         }

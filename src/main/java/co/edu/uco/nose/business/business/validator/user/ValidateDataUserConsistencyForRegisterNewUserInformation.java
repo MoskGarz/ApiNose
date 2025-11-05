@@ -3,6 +3,7 @@ package co.edu.uco.nose.business.business.validator.user;
 import co.edu.uco.nose.business.business.rule.generics.StringFormatValueIsValidRule;
 import co.edu.uco.nose.business.business.rule.generics.StringLengthIsValidRule;
 import co.edu.uco.nose.business.business.rule.generics.StringValueIsPresentRule;
+import co.edu.uco.nose.business.business.rule.generics.idValueIsNotDefaultValueRule;
 import co.edu.uco.nose.business.business.validator.Validator;
 import co.edu.uco.nose.business.domain.UserDomain;
 import co.edu.uco.nose.crosscuting.exception.NoseException;
@@ -49,6 +50,8 @@ public class ValidateDataUserConsistencyForRegisterNewUserInformation implements
         StringValueIsPresentRule.executeRule(data.getFirstLastName(), "primer apellido", true);
         StringValueIsPresentRule.executeRule(data.getEmail(), "email", true);
         StringValueIsPresentRule.executeRule(data.getPhoneNumber(), "numero de telefono", true);
+        idValueIsNotDefaultValueRule.executeRule(data.getIdentificationType().getId(), "tipo de identificacion");
+        idValueIsNotDefaultValueRule.executeRule(data.getCity().getId(), "ciudad de residencia");
     }
 
     private void validateDataLenght(final UserDomain data){
